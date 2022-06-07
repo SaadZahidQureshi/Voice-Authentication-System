@@ -182,10 +182,6 @@ def test(request):
     s.process_audio("javeria.wav") 
     # print('SPLIT DONE')
 
-
-
-
-
     #path to training data
     source   = "signup_voice/"
     #path where training speakers will be saved
@@ -219,7 +215,6 @@ def test(request):
                 else:
                     features = np.vstack((features, vector))
 
-
             gmm = GaussianMixture(n_components=16, max_iter=200, covariance_type='diag', n_init=3)
             gmm.fit(features)
 
@@ -229,12 +224,7 @@ def test(request):
             print('Model trained for :', picklefile, " with features = ", features.shape)
             features = np.asarray(())
         
-    
-
-   
-
-
-    return HttpResponse();
+    return HttpResponse()
 
 def result(request):
 
@@ -270,11 +260,11 @@ def result(request):
             :param duration: Number of seconds we want to record for
             :param save_path: Where to store recording
             """
-            print("Start recording...")
+            print("Recording started...")
             self._create_recording_resources(save_path)
             self._write_wav_file_reading_from_stream(duration)
             self._close_recording_resources()
-            print("Stop recording")
+            print("Recording Ended")
 
         def _create_recording_resources(self, save_path: str) -> None:
             # print("saveme")
@@ -320,14 +310,11 @@ def result(request):
     
     path = source+"test.wav"
 
-    
     sr, audio = read(path)
     vector = extract_features(audio, sr)
 
     log_likelihood = np.zeros(len(models))
     # print(log_likelihood)
-
-  
 
     for x in range(len(models)):
         gmmall = models[x]  # checking with each model one by one
