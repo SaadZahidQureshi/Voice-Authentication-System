@@ -118,7 +118,8 @@
         });
         $("#start").click(function(){
             $("#start").html('listening');
-            $.get('/test').done(function(){$("#start").html('done');$("#myModal").modal('hide');})
+            let name = document.getElementById('name').value;
+            $.get('/test', {'name':name}).done(function(){$("#start").html('done');$("#myModal").modal('hide');})
         });
     });
 </script>

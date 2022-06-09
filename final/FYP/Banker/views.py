@@ -110,7 +110,9 @@ def voicesignin(request):
     return render(request, 'voicesignin.html')
 
 def test(request):
-    # print(name)
+    print(request.GET.get('name'))
+    name = request.GET.get('name')+'.wav'
+
     s = Split()
     @dataclass
     class StreamParams:
@@ -174,16 +176,16 @@ def test(request):
 
     stream_params = StreamParams()
     recorder = Recorder(stream_params)
-    recorder.record(120, "javeria.wav")
+    recorder.record(20,"full_voice/"+ name)
     # print("RECORD DONE")
 
     #Split audio
     # print('SPLIT START')
-    s.process_audio("javeria.wav") 
+    s.process_audio("full_voice/"+name) 
     # print('SPLIT DONE')
 
     #path to training data
-    source   = "signup_voice/"
+    source   = "voice_samples/"+name[11:-4]
     #path where training speakers will be saved
     dest = "models/"
     # Extracting features for each speaker (5 files per speakers
