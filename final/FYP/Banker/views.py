@@ -77,22 +77,38 @@ def signup(request):
     else:
         return render (request, 'signup.html')
 
-def signin(request):    
+def signin(request):
     if request.method == 'POST':
         email = request.POST['email']
-        password = request.POST['your_pass']
-        print(email,password)
-        user = auth.authenticate(email = email, password = password)
+        your_pass = request.POST['your_pass']
+        print(email)
+        print(your_pass)
+        user = auth.authenticate(username = email, password =your_pass  )
         print(user)
         if user is not None:
-            auth.login(request,user)
-            return redirect('index')
+            auth.login(request , user)
+            return redirect('index')   
         else:
-            messages.info(request,"Invalid credentials ")
+            messages.info(request, 'invalid username or password')
             return redirect ('signin')
-
     else:
-        return render (request, 'signin.html')
+        return render (request, 'signin.html')  
+
+    # if request.method == 'POST':
+    #     email = request.POST['email']
+    #     password = request.POST['your_pass']
+    #     print(email,password)
+    #     user = auth.authenticate(email = email, password = password)
+    #     print(user)
+    #     if user is not None:
+    #         auth.login(request,user)
+    #         return redirect('index')
+    #     else:
+    #         messages.info(request,"Invalid credentials ")
+    #         return redirect ('signin')
+
+    # else:
+    #     return render (request, 'signin.html')
 
 
 
@@ -176,7 +192,7 @@ def test(request):
 
     stream_params = StreamParams()
     recorder = Recorder(stream_params)
-    recorder.record(20,"full_voice/"+ name)
+    recorder.record(120,"full_voice/"+ name)
     # print("RECORD DONE")
 
     #Split audio
@@ -185,7 +201,7 @@ def test(request):
     # print('SPLIT DONE')
 
     #path to training data
-    source   = "voice_samples/"+name[11:-4]
+    source   = "voice_samples/"
     #path where training speakers will be saved
     dest = "models/"
     # Extracting features for each speaker (5 files per speakers
