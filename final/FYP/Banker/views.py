@@ -5,6 +5,7 @@ from posixpath import split
 import os
 import wave
 from dataclasses import dataclass, asdict
+import django
 import pyaudio
 from .a import Split
 from django.http import HttpResponse
@@ -12,7 +13,6 @@ from .models import contactus
 #from PyQst4.Qtcore import *
 from django.shortcuts import render, redirect
 from .models import profile
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth.models import User, auth
 import pickle
@@ -83,7 +83,7 @@ def signin(request):
         your_pass = request.POST['your_pass']
         print(email)
         print(your_pass)
-        user = auth.authenticate(username = email, password =your_pass  )
+        user = auth.authenticate(email = email, password =your_pass  )
         print(user)
         if user is not None:
             auth.login(request , user)
@@ -192,7 +192,7 @@ def test(request):
 
     stream_params = StreamParams()
     recorder = Recorder(stream_params)
-    recorder.record(120,"full_voice/"+ name)
+    recorder.record(300,"full_voice/"+ name)
     # print("RECORD DONE")
 
     #Split audio
@@ -245,6 +245,8 @@ def test(request):
     return HttpResponse()
 
 def result(request):
+   
+    name = request.GET.get('name')
 
     #Live recording for testing
     @dataclass
@@ -311,7 +313,7 @@ def result(request):
     stream_params = StreamParams()
     recorder = Recorder(stream_params)
     recorder.record(20, "identify/test.wav")
-    print("done")
+    # print("done")
     # path to training data
     source = "identify/"
 
@@ -334,6 +336,7 @@ def result(request):
     log_likelihood = np.zeros(len(models))
     # print(log_likelihood)
 
+
     for x in range(len(models)):
         gmmall = models[x]  # checking with each model one by one
         scores = np.array(gmmall.score(vector))
@@ -347,10 +350,15 @@ def result(request):
         # print(result)
         # print(w)
         detected = speakers[w]
-        print("\tdetected as - ", speakers[w])
-        # messages.info(request,"\tdetected as - ", detected)
-        # return render(request,"index.html")
+        # print(detected)
+    
+        if(name == speakers[w]):
+            print("\tdetected as - ", speakers[w])
+        
+        else:
+            print("Unknown User")
     else:
-        print(result)
-        print("Unknown User")
+        print("Unknown User ")
+    
+    # return redirect(request, 'index')
     return HttpResponse();

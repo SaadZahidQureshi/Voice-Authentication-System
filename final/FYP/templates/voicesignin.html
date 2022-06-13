@@ -99,7 +99,8 @@
       });
       $("#start").click(function(){
           $("#start").html('listening');
-          $.get('/result').done(function(){$("#start").html('done');$("#myModal").modal('hide');})
+          let name = document.getElementById('name').value;
+          $.get('/result',{'name':name}).done(function(){$("#start").html('done');$("#myModal").modal('hide');})
       });
   });
 </script>
